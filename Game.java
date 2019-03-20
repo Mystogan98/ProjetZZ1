@@ -1,20 +1,35 @@
- 
 public class Game {
-    Strategy bot;
-    Player player;
-    Memory memory;
+    private Strategy bot;
+    private Player player;
+    private Memory memory;
     
     public Game() {
         // Instantiate bot, player and memory
+        bot = new Strategy(null);
+        player = new Player();
+        memory = new Memory();
     }
 
-    // En gros la boucle de gameplay ca va etre ca :
+    public void ComputeTurn() {
+        for(int i = 0 ; i < 10 ; i++)
+        {        
+            bot.Play(memory);
+            player.Play(memory);
+            ComputeScore();
+            memory.EndTurn();
+            memory.Show();
+            System.out.println("Bot : " + bot.GetScore() + " // Player : " + player.GetScore());
+        }
+    }
+
+    // En gros la boucle de gameplay ca va etre ça :
     // bot.play(memory);
     // player.play(memory);
     // computeScore();
+    // Memory.EndTurn();
     // Afficher();
     // Et on boucle.
-    // On pourra caller tout ce qu'on veux entre, donc pas de soucis pour étendre le jeu.
+    // On pourra faire tout ce qu'on veux entre, donc pas de soucis pour étendre le jeu.
 
     // Dans player on pourra faire ce qu'on veut dans play(), ici on n'utilise que la varible action.
     // Du coup on pourra facilement faire un jeu a la main ou par algo.
@@ -42,6 +57,10 @@ public class Game {
             } else if (player.GetAction() == Action.cheat) {
                 // Il se passe rien ici, je laisse le if mais en vrai on pourrait meme l'enlever.
             }
+        }
+        if(bot.GetAction() == Action.error || player.GetAction() == Action.error)
+        {
+            System.out.println("Y'a une erreur là Jean-Paul.");
         }
     }
 
