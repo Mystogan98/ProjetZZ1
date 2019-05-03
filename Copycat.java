@@ -6,15 +6,14 @@ public class Copycat extends Strategy {
     private String name = StrategyNames.Copycat.getName();
 
     public void Play(Memory memory) {
-        ArrayList<Action> last = memory.GetPlayerHistory();
-        int size = last.size();
-        if(size == 0) 
+        Action last = memory.GetLastPlayerHistory();
+        if(last == null) 
         {
             action = Action.cooperate;
         }
         else
         {
-            if(last.get(size - 1) == Action.cooperate)
+            if(last == Action.cooperate)
             {
                 action = Action.cooperate;
             }
