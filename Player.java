@@ -1,6 +1,3 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 public class Player {
     protected int score;
 	protected Action action;

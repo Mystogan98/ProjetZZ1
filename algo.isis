@@ -13,3 +13,20 @@ token debut historique : (
 token fin historique : )
 token action : :
 token commentaire : #
+
+
+# Si un commentToken est lu, on passe la ligne
+# lire jusqu'au startToken
+# lire tout les 'c' et les 't' qui suivent
+# lire jusqu'a l'actionToken
+# lire le 'c' ou le 't' qui suit
+# si la syntaxe est incorrecte, on passe la ligne en afficheant une erreur
+
+
+:c
+c:t
+t:c
+
+f():c
+f(c):t
+f(t):c

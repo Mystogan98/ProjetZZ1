@@ -12,9 +12,9 @@ public class Game {
 
     public void ComputeTurn() {
         System.out.println(bot.GetName());
-        for(int i = 0 ; i < 10 ; i++) {        
+        for(int i = 0 ; i < 10 ; i++) {
             bot.Play(memory);
-            player.Play(memory);
+            player.Play(memory, null);
             ComputeScore();
             memory.EndTurn();
             memory.Show();
