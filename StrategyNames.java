@@ -2,6 +2,7 @@ public enum StrategyNames {
 	Cheater("Cheater"), 
 	Copycat("Copycat"),
 	Cooperater("Cooperater"),
+	Resentful("Resentful"),
 	Alternater("Alternater");
 
 	private String name;

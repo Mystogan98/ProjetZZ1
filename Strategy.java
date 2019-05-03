@@ -17,6 +17,8 @@ public class Strategy extends Player {
                 return new Copycat();
             case 4:
                 return new Cooperater();
+            case 5:
+                return new Resentful();
             default:
                 System.out.println("Y'a une erreur la Jean-Paul");
                 return new Alternater(null);
