@@ -3,24 +3,17 @@ import java.io.InputStreamReader;
 
 public class Player {
     protected int score;
-    protected Action action;
+	protected Action action;
+	private boolean readFromTerminal = true;
 
     public void Play(Memory memory)
     {
-        System.out.println("Entre 'cooperate' ou 'cheat'.");
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        try { // Nique ta race java de mes couilles avec tes try/catch partout
-            String s = in.readLine();
-            if(s.compareTo("cooperate") == 0) {
-                action = Action.cooperate;
-            } else if (s.compareTo("cheat") == 0) {
-                action = Action.cheat;
-            } else {
-                action = Action.error;
-            }
-        } catch(Exception e) {
-            // On catch et on fait rien parce que rique ta race
-        }
+		if(readFromTerminal) {
+			action = Input.TerminalInput();
+		} else {
+			action = Input.FileInput(memory);
+		}
+        
         memory.MemorisePlayerAction(action);
     }
 

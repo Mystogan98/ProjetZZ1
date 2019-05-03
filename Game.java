@@ -5,14 +5,14 @@ public class Game {
     
     public Game() {
         // Instantiate bot, player and memory
-        bot = new Strategy(null);
+        bot = Strategy.Instantiate();
         player = new Player();
         memory = new Memory();
     }
 
     public void ComputeTurn() {
-        for(int i = 0 ; i < 10 ; i++)
-        {        
+        System.out.println(bot.GetName());
+        for(int i = 0 ; i < 10 ; i++) {        
             bot.Play(memory);
             player.Play(memory);
             ComputeScore();

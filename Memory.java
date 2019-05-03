@@ -2,13 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Memory {
-    private List<Action> playerHistory;
-    private List<Action> botHistory;
+    private ArrayList<Action> playerHistory;
+    private ArrayList<Action> botHistory;
 
     private Action botAction, playerAction;
-
-    // Faut faire gaffe ici, celui qui joue en deuxième aura accés a une info en plus dans les listes
-    // faudrais faire une fonction "nextTurn()" avec des variables de temporisation ou un truc du genre
 
     public Memory() {
         playerHistory = new ArrayList<>();
@@ -47,6 +44,6 @@ public class Memory {
         botHistory.add(botAction);
     }
 
-    public List<Action> GetPlayerHistory() { return playerHistory; }
-    public List<Action> GetBotHistory() { return botHistory; }
+    public ArrayList<Action> GetPlayerHistory() { return playerHistory; }
+    public ArrayList<Action> GetBotHistory() { return botHistory; }
 }
