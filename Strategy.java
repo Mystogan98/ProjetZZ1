@@ -19,6 +19,8 @@ public class Strategy extends Player {
                 return new Cooperater();
             case 5:
                 return new Resentful();
+            case 6:
+                return new Detective();
             default:
                 System.out.println("Y'a une erreur la Jean-Paul");
                 return new Alternater(null);
