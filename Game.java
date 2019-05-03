@@ -55,7 +55,7 @@ public class Game {
                 bot.IncreaseScore(3);
                 player.IncreaseScore(-1);
             } else if (player.GetAction() == Action.cheat) {
-                // Il se passe rien ici, je laisse le if mais en vrai on pourrait meme l'enlever.
+                // Il se passe rien ici, je laisse le if mais en vrai on pourrait même l'enlever.
             }
         }
         if(bot.GetAction() == Action.error || player.GetAction() == Action.error)

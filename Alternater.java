@@ -16,13 +16,12 @@ public class Alternater extends Strategy {
     }
 
     public void Play(Memory memory) {
-        ArrayList<Action> History = memory.GetBotHistory();
-        int size = History.size();
+        Action last = memory.GetLastBotAction();
 
-        if(size == 0) {
+        if(last == null) {
             action = start;
         } else {
-            if(History.get(size - 1) == Action.cooperate){
+            if(last == Action.cooperate){
                 action = Action.cheat;
             } else {
                 action = Action.cooperate;

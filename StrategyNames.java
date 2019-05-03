@@ -2,13 +2,13 @@ public enum StrategyNames {
 	Cheater("Cheater"), 
 	Alternater("Alternater");
 
-	private string name;
+	private String name;
 
 	StrategyNames(String name)
 	{
 		this.name = name;
 	}
 
-	public string getName() { return name; }
-	public string ToString() { return name; }
+	public String getName() { return name; }
+	public String ToString() { return name; }
 }

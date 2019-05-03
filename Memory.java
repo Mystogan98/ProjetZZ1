@@ -44,6 +44,22 @@ public class Memory {
         botHistory.add(botAction);
     }
 
+    // Return a list with all the player's actions
     public ArrayList<Action> GetPlayerHistory() { return playerHistory; }
+    // Return a list with all the Bot's actions
     public ArrayList<Action> GetBotHistory() { return botHistory; }
+
+    // Return the last Player action or NULL if it's the first round
+    public Action GetLastPlayerAction() { 
+        if(playerHistory.size() == 0)
+            return null;
+        return playerHistory.get(playerHistory.size() -1);
+    }
+
+    // Return the last Bot action or NULL if it's the first round
+    public Action GetLastBotAction() { 
+        if(botHistory.size() == 0)
+            return null;
+        return botHistory.get(botHistory.size() -1); 
+    }
 }
