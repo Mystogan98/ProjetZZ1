@@ -1,5 +1,6 @@
 public enum StrategyNames {
 	Cheater("Cheater"), 
+	Copycat("Copycat"),
 	Alternater("Alternater");
 
 	private string name;

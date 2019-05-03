@@ -13,6 +13,8 @@ public class Strategy extends Player {
                 return new Cheater();
             case 2:
                 return new Alternater(null);
+            case 3:
+                return new Copycat();
             default:
                 System.out.println("Y'a une erreur la Jean-Paul");
                 return new Alternater(null);
