@@ -1,7 +1,7 @@
 public class Player {
     protected int score;
 	protected Action action;
-	private boolean readFromTerminal = true;
+	private boolean readFromTerminal = false;
 
     public void Play(Memory memory)
     {

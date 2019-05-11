@@ -1,11 +1,7 @@
 import java.util.ArrayList;
 
-import javax.lang.model.util.ElementScanner6;
-
-import com.sun.corba.se.spi.orbutil.fsm.Action;
-
-public class Cheater extends Strategy {
-    private String name = StrategyNames.Cheater.getName();
+public class Detective extends Strategy {
+    private String name = StrategyNames.Detective.getName();
     private Boolean cheat = true;
 
     public void Play(Memory memory) {
@@ -54,7 +50,6 @@ public class Cheater extends Strategy {
                 }
                 break;
         }
-        action = Action.cheat;
         memory.MemoriseBotAction(action);
     }
 

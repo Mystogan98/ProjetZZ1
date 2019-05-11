@@ -14,11 +14,11 @@ public class Game {
         System.out.println(bot.GetName());
         for(int i = 0 ; i < 10 ; i++) {
             bot.Play(memory);
-            player.Play(memory, null);
+            player.Play(memory);
             ComputeScore();
             memory.EndTurn();
-            memory.Show();
-            System.out.println("Bot : " + bot.GetScore() + " // Player : " + player.GetScore());
+            //memory.Show();
+            System.out.println("Bot : " + bot.GetScore() + " (" + memory.GetLastBotAction() + ") // Player : " + player.GetScore() + " (" + memory.GetLastPlayerAction() +")");
         }
     }
 

@@ -1,5 +1,3 @@
-import com.sun.corba.se.spi.orbutil.fsm.Action;
-
 public class Resentful extends Strategy {
     private String name = StrategyNames.Resentful.getName();
     private Boolean fault = false;
