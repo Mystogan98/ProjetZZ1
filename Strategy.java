@@ -4,7 +4,6 @@ public class Strategy extends Player {
 
     public static Strategy Instantiate() {
         // La on met un bon gros switch sa maman pour instantier au hasard
-		// Où on instantie "name"
 		int rng = (int) Math.floor(Math.random() * nbStrategy) + 1;   // Retourne un entier entre 1 et nbStrategy
 
         switch(rng)
