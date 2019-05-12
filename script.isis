@@ -1,4 +1,5 @@
 # Ce fichier est lu par le programme
-:c
-t:t
-c:c
+f():c
+f(t):t
+f(c):c
+f(cc):t

@@ -81,7 +81,6 @@ public class Input {
 			{
 				history = computeScriptLine(line.toCharArray());
 				if(history != null) {
-					System.out.println(history + ":" + action.toString());
 					script.put(history, action);
 				}
 			}
