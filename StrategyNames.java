@@ -4,7 +4,8 @@ public enum StrategyNames {
 	Cooperater("Cooperater"),
 	Resentful("Resentful"),
 	Detective("Detective"),
-	Alternater("Alternater");
+	Alternater("Alternater"),
+	Wary("Wary");
 
 	private String name;
 
