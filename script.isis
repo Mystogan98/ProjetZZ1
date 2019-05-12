@@ -1,4 +1,16 @@
-# Ce fichier est lu par le programme
+#####################################################################################################################################
+# Ce fichier est lu par le programme                                                                                                #
+# Tout ce qui se trouve avant les 2 points constitue l'historique de jeu de l'IA, 'c' pour 'coopérer', 't' pour 'tricher'           #
+# 'cctc' = si l'IA a coopérer 2 fois, puis triché, puis coopéré à nouveau                                                           #
+# Après le ':', écrire 'c' si le script doit coopérer, 't' si il doit tricher                                                       #
+# La syntaxe autre que les symbole 'c', 't', ':' et '#' n'a aucune importance, on peut donc utiliser la syntaxe que l'on souhaite   #
+#                                                                                                                                   #
+# Exemple :                                                                                                                         #
+# f():t             => Si l'IA n'as rien joué au dernier tour (= le premier tour de jeu), tricher                                   #
+# tt:t              => Si l'IA a triché les deux derniers tours, tricher                                                            #
+# si cc alors : c  => Si l'IA a coopérer les deux derniers tours, coopérer															#
+#####################################################################################################################################
+
 f():c
 f(t):t
 f(c):c
