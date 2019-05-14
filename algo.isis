@@ -3,7 +3,6 @@
 
 f():c
 f(c):t
-# Nique toi
 f(t):t
 
 # ss : simple script
