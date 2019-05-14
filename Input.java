@@ -10,15 +10,23 @@ import java.io.IOException;
 public class Input {
     private static Action action;
     private static char actionToken = ':', commentToken = '#';
-    private static HashMap<String,Action> script = null;  // f(ctc):t => ("ctc",Action.cheat)
+	private static HashMap<String,Action> script = null;  // Exemple : f(ctc):t => ("ctc", Action.cheat)
+	public static boolean readFromTerminal = true;
 
-    public static Action TerminalInput()
+	public static Action getInput(Memory memory) {
+		if(readFromTerminal)
+			return Input.TerminalInput();
+		else
+			return Input.FileInput(memory);
+	}
+
+    private static Action TerminalInput()
     {
 		System.out.println("Entre 'cooperate' ou 'cheat'.");
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-        try { // Nique ta race java de mes couilles avec tes try/catch partout
+        try {
             String s = in.readLine();
             if(s.compareTo("cooperate") == 0) {
                 action = Action.cooperate;
@@ -28,14 +36,13 @@ public class Input {
                 action = Action.error;
             }
         } catch(Exception e) {
-			// On catch et on fait rien parce que nique ta race
 			action = Action.error;
         }
 
         return action;
     }
 
-	public static Action FileInput(Memory memory) {
+	private static Action FileInput(Memory memory) {
 		ArrayList<Action> history = memory.GetBotHistory();
 		String line = "";
 
@@ -63,7 +70,7 @@ public class Input {
 		return script.get(line);
     }
     
-    private static void getScript(String filename)
+    public static void getScript(String filename)
     {
 		File file = new File(filename);
 		BufferedReader reader;
@@ -84,10 +91,14 @@ public class Input {
 					script.put(history, action);
 				}
 			}
+			reader.close();
 		} catch (IOException e) {
 			System.err.println("Problème lors de la lecture du script");
 			return;
 		}
+		
+		Main.scriptName = filename;
+		readFromTerminal = false;
 	}
 	
 	private static String computeScriptLine(char[] line) {
@@ -96,38 +107,33 @@ public class Input {
 		action = null;
 
 		for (char letter : line) {
-			switch(letter)
-			{
-				case 'c':
-					if(!ActionTokenHasBeenRead)
-						history += 'c';
-					else if (action == null)
-						action = Action.cooperate;
-					else {
-						System.err.println("Problème dans la lecture du script :" + line.toString());
-						return null;
-					}
-				break;
-				case 't':
-					if(!ActionTokenHasBeenRead)
-						history += 't';
-					else if (action == null)
-						action = Action.cheat;
-					else {
-						System.err.println("Problème dans la lecture du script :" + line.toString());
-						return null;
-					}
-				break;
-				case ':':	//actionToken
-					ActionTokenHasBeenRead = true;
-				break;
-				case '#':	//commentToken
-					if(ActionTokenHasBeenRead || history != "")
-					{
-						System.err.println("Problème dans la lecture du script :" + line.toString());
-						return null;
-					}
+			if(letter == 'c') {
+				if(!ActionTokenHasBeenRead)
+					history += 'c';
+				else if (action == null)
+					action = Action.cooperate;
+				else {
+					System.err.println("Problème dans la lecture du script :" + line.toString());
 					return null;
+				}
+			} else if (letter == 't') {
+				if(!ActionTokenHasBeenRead)
+					history += 't';
+				else if (action == null)
+					action = Action.cheat;
+				else {
+					System.err.println("Problème dans la lecture du script :" + line.toString());
+					return null;
+				}
+			} else if (letter == actionToken) {
+				ActionTokenHasBeenRead = true;
+			} else if (letter == commentToken) {
+				if(ActionTokenHasBeenRead || history != "")
+				{
+					System.err.println("Problème dans la lecture du script :" + line.toString());
+					return null;
+				}
+				return null;
 			}
 		}
 		return history;

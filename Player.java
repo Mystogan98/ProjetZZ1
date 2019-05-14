@@ -1,16 +1,10 @@
 public class Player {
     protected int score;
 	protected Action action;
-	private boolean readFromTerminal = false;
 
     public void Play(Memory memory)
     {
-		if(readFromTerminal) {
-			action = Input.TerminalInput();
-		} else {
-			action = Input.FileInput(memory);
-		}
-        
+		action = Input.getInput(memory);
         memory.MemorisePlayerAction(action);
     }
 

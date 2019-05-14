@@ -5,7 +5,7 @@ public class Game {
     
     public Game() {
         // Instantiate bot, player and memory
-        bot = Strategy.Instantiate();
+        bot = Strategy.Instantiate(null);
         player = new Player();
         memory = new Memory();
     }
@@ -31,14 +31,11 @@ public class Game {
     // Et on boucle.
     // On pourra faire tout ce qu'on veux entre, donc pas de soucis pour étendre le jeu.
 
-    // Dans player on pourra faire ce qu'on veut dans play(), ici on n'utilise que la varible action.
-    // Du coup on pourra facilement faire un jeu a la main ou par algo.
+    // Dans player on pourra faire ce qu'on veut dans play(), ici on n'utilise que la variable action.
+    // Du coup on pourra facilement faire un jeu à la main ou par algo.
 
     // Les bot (Strategy) devront etre des implementation de Strategy, comme ca on fait "play" comme on veut pour chaque.
     // D'ailleurs la classe "Strategy" est l'implémentation du pattern "Strategy". Ah ah.
-    // Faudra prévoir pour les générer aléatoirement, caller un bon gros switch quelque part.
-    
-    // Y'a pas de fonction d'affichage ni vraiment de boucle principale encore, mais c'pas très grave, ca viendra.
 
     private void ComputeScore() {
         if(bot.GetAction() == Action.cooperate)
@@ -64,7 +61,9 @@ public class Game {
         }
     }
 
-    private void Menu() {
-        // On en as besoin ? Pas sur
+    // If name == null, then it will instantiate an AI randomly
+    private void ChooseAI(String name)
+    {
+        bot = Strategy.Instantiate(name); 
     }
 }
