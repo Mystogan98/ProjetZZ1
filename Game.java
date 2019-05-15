@@ -11,15 +11,76 @@ public class Game {
     }
 
     public void ComputeTurn() {
+        player.ResetScore();
+        memory.Reset();
         System.out.println(bot.GetName());
         for(int i = 0 ; i < 10 ; i++) {
             bot.Play(memory);
             player.Play(memory);
             ComputeScore();
             memory.EndTurn();
-            //memory.Show();
-            System.out.println("Bot : " + bot.GetScore() + " (" + memory.GetLastBotAction() + ") // Player : " + player.GetScore() + " (" + memory.GetLastPlayerAction() +")");
+            ShowScore();
         }
+        System.out.println();
+    }
+
+    public void Tournament() {
+        int botScore = 0;
+        player.ResetScore();
+
+        for (StrategyNames name : StrategyNames.values()) {
+            memory.Reset();
+            bot = Strategy.Instantiate(name.getName());
+            bot.IncreaseScore(botScore);    // We keep the score through all the AI
+
+            System.out.println(bot.GetName());
+            for(int i = 0 ; i < 10 ; i++) {
+                bot.Play(memory);
+                player.Play(memory);
+                ComputeScore();
+                memory.EndTurn();
+                ShowScore();
+            }
+            botScore = bot.GetScore();
+            System.out.println();
+        }
+
+        Main.ClearScreen();
+        System.out.println("Final scores : ");
+        System.out.println("Player : " + player.GetScore());
+        System.out.println("Bot    : " + bot.GetScore());
+        System.out.println();
+    }
+
+    private void ShowScore() {
+        String result = "Bot : ";
+
+        result += ShowTextFormating(bot.GetScore(), memory.GetLastBotAction());
+        result += " // Player : ";
+        result += ShowTextFormating(player.GetScore(), memory.GetLastPlayerAction());
+
+        System.out.println(result);
+    }
+
+    private String ShowTextFormating(int score, Action action)
+    {
+        String result = "";
+
+        if (Math.abs(score) >= 10)
+            result += score;
+        else if (Math.abs(score) >= 0)
+            result += score + " ";
+
+        if(score >= 0)
+            result += " ";
+
+        result += " (";
+        if(action == Action.cooperate)
+            result += "cooperate)";
+        else
+            result += "  cheat  )";
+
+        return result;
     }
 
     // En gros la boucle de gameplay ca va etre ça :
@@ -62,7 +123,7 @@ public class Game {
     }
 
     // If name == null, then it will instantiate an AI randomly
-    private void ChooseAI(String name)
+    public void ChooseAI(String name)
     {
         bot = Strategy.Instantiate(name); 
     }

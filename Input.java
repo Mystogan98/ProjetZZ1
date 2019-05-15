@@ -22,15 +22,15 @@ public class Input {
 
     private static Action TerminalInput()
     {
-		System.out.println("Entre 'cooperate' ou 'cheat'.");
+		System.out.println("Entre 'cooperer' ou 'tricher'.");
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
         try {
             String s = in.readLine();
-            if(s.compareTo("cooperate") == 0) {
+            if(s.compareTo("cooperer") == 0) {
                 action = Action.cooperate;
-            } else if (s.compareTo("cheat") == 0) {
+            } else if (s.compareTo("tricher") == 0) {
                 action = Action.cheat;
             } else {
                 action = Action.error;
@@ -47,7 +47,6 @@ public class Input {
 		String line = "";
 
 		if(script == null) {	// Si le script n'existe pas, le lire
-			script = new HashMap<>();
 			getScript("script.isis");
 			System.out.println(script);
 
@@ -75,6 +74,7 @@ public class Input {
 		File file = new File(filename);
 		BufferedReader reader;
 		String line = "", history = "";
+		script = new HashMap<>();
 
 		try {
 			reader = new BufferedReader(new FileReader(file));
