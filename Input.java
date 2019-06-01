@@ -93,10 +93,10 @@ public class Input {
 			{
 				// On traite cette ligne dans "computeScriptLine" qui retourne l'historique (ou null) ainsi que l'action qui y est liée dans la variable Action.
 				history = computeScriptLine(line.toCharArray());
-				if(action != null) {	// Line has been read correctly
-					if(history == "") {
+				if(action != null) {	// Si la ligne a été lue correctement
+					if(history == "") {	// Si l'historique est vide, on l'ajoute directement
 						script.put(history, action);
-					} else if (history != null) {
+					} else if (history != null) {	// Sinon on le passe dans la fonction AddToScript qui va s'occuper de gérer les jokers
 						AddToScript(history);
 					}
 				}	
@@ -107,95 +107,96 @@ public class Input {
 			return;
 		}
 		
-		System.out.println(script);
+		// On modifie le nom de fichier dans Main afin qu'il soit affiché dans la menu (indication qu'il a bien été chargé)
 		Main.scriptName = filename;
+		// Et on modifie le mode de jeu afin que le script soit utilisé
 		readFromTerminal = false;
 	}
 	
+	// Prend en entrée une ligne du script et retourne l'historique et l'action (ou rien si ligne de commentaire)
 	private static String computeScriptLine(char[] line) {
-		boolean ActionTokenHasBeenRead = false;
+		boolean ActionTokenHasBeenRead = false;	// Est-ce que le token d'action (':') a été lu ?
 		String history = "";
 		action = null;
 
+		// On analyse et traite chaque caratère
 		for (char letter : line) {
 			if(letter == 'c') {
-				if(!ActionTokenHasBeenRead)
+				if(!ActionTokenHasBeenRead)	// Si le token d'action n'a pas encore été lu, il s'agit de l'historique
 					history += 'c';
-				else if (action == null)
+				else if (action == null)	// Sinon si le token a été lu mais pas l'action, il s'agit de l'action a éffectué
 					action = Action.cooperate;
-				else {
+				else {	// Si l'action a déjà été lu, il y a une erreur dans le script
 					System.err.println("Problème dans la lecture du script :" + line.toString());
 					return null;
 				}
 			} else if (letter == 't') {
-				if(!ActionTokenHasBeenRead)
+				if(!ActionTokenHasBeenRead) // Si le token d'action n'a pas encore été lu, il s'agit de l'historique
 					history += 't';
-				else if (action == null)
+				else if (action == null)	// Sinon si le token a été lu mais pas l'action, il s'agit de l'action a éffectué
 					action = Action.cheat;
-				else {
+				else {	// Si l'action a déjà été lu, il y a une erreur dans le script
 					System.err.println("Problème dans la lecture du script :" + line.toString());
 					return null;
 				}
 			} else if(letter == '*' || letter == '?') {
-				if(!ActionTokenHasBeenRead)
+				if(!ActionTokenHasBeenRead) // Si le token d'action n'a pas encore été lu, il s'agit de l'historique
 					history += letter;
-				else {
+				else {	// Sinon il y a une erreur dans le script (un joker ne peut pas être utilisé comme action à effectuer)
 					System.err.println("Problème dans la lecture du script :" + line.toString());
 					return null;
 				}
-			} else if (letter == actionToken) {
-				ActionTokenHasBeenRead = true;
-			} else if (letter == commentToken) {
-				if(ActionTokenHasBeenRead || history != "")
+			} else if (letter == actionToken) {	// Si on lit le token d'action, alors le token d'action à été lu
+				if(!ActionTokenHasBeenRead)	// Si il n'avait pas encore été lu
+					ActionTokenHasBeenRead = true;
+				else {	// Si il avait deja été lu
+					System.err.println("Problème dans la lecture du script :" + line.toString());
+					return null;
+				}
+			} else if (letter == commentToken) {	// Si il s'agit d'un commentaire
+				if(ActionTokenHasBeenRead || history != "")	// Mais que nous avons lu des caractère d'historique non suivis par une action, alors il y a une erreur
 				{
 					System.err.println("Problème dans la lecture du script :" + line.toString());
 					return null;
 				}
-				return null;
+				return null;	// Sinon il s'agit simplement d'une ligne de commentaire
 			}
 		}
-		return history;
+		return history;	// On retourne l'historique, ainsi que l'action dans la variable Action.
 	}
 
+	// Cette fonction est chargée de traiter l'historique avant de l'ajouter au script.
+	// Sa fonction principale est de gérer les jokers.
 	private static void AddToScript(String history) {
-		// **t => cct, ctt, tct, ttt
-		// ??t => cct, ctc, tcc, ttc, tct, ctt, ttt
-
-		// { 'ttt?', 'ccc?' } => { 'tttc', 'ttct', 'tctt', 'cttt', 'tttt'*4; Pareil }
-		// 2 => 16 (10)
-		// nb de ligne => nb de ligne * somme de lettre (- (somme de lettre - nb de ligne))
-		// { 'tt?', 'cc?' } => { 'ctt', 'tct', 'ttc', 'ttt', 'ttt , 'ttt'; 'ccc', 'ccc', 'ccc', 'cct', 'ctc', 'tcc' }
-		// 2 => 12 (8)
-		// { 't?', 'c?' } => { 'tc', 'ct', 'tt', 'tt'; 'ct', 'tc', 'cc', 'cc' }
-		// 2 => 8 (6)
-		// { '?', 't?', 'c?' } => { 'c', 't'; 'ct', 'tc', 'tt', 'tt'; 'cc', 'cc', 'ct', 'tc' }
-		// 3 => 10 (8)
-
 		String[] historyTab = { "" };
 		int nbWildcard = 0;
 
+		// On construit ici un tableau avec la totalité des clés générées par la ligne en cours.
 		for (char letter : history.toCharArray()) {
 			switch(letter)
 			{
 				case 'c': case 't':
+					// Si on recontre un 'c' ou un 't', on l'ajoute simplement à la suite de toute les clés.
 					historyTab = AddLetterToHistory(historyTab, letter);
 				break;
 				case '*':
+					// Si on rencontre un '*', on ajoute 'c' ET 't' a la fin de toute les clés.
 					historyTab = AddFixedWildcardToHistory(historyTab);
 				break;
 				case '?':
-					nbWildcard++;
+					nbWildcard++;	// On traite les '?' a la fin car ils ajoute 'c' et 't' a CHAQUE emplacement possible
 				break;
 			}
 		}
 
+		// Une fois qu'on a traiter les autres caratères, on gérer les '?', qui ajoute 'c' ET 't' a tout les emplacement possible de toute les clés
 		for(int i = 0 ; i < nbWildcard ; i++) {
 			historyTab = AddWildcardToHistory(historyTab);
-			System.out.println(script);
 		}
 		
+		// Et enfin on ajoute toute les clés dans le script.
+		// Il est important de noter que si les clés existent deja, elle seront remplacées; c'est donc la ligne la plus basse dans le script qui a la priorité
 		for (String line : historyTab) {
-			//System.out.println(script);
 			script.put(line, action);
 		}
 	}
@@ -231,41 +232,39 @@ public class Input {
 
 	// Ajoute 'c' et 't' à chaque position dans la chaine de chaque ligne de 'historyTab'
 	private static String[] AddWildcardToHistory(String[] historyTab) {
-		// (nb de ligne * somme de lettre) - (somme de lettre - nb de ligne) => taille sans doublon		FAUX?
-		// (nb de ligne * somme de lettre) => taille avec doublons	FAUX?
-
 		// (nb de lettre + nb de mot) * 2 => Taille avec doublons
-		int nbOfLetters = CountLetters(historyTab), i = 0;
-		String[] result = new String[(historyTab.length + nbOfLetters) * 2];
-		String resultLine, tmp;
+		String[] result = new String[(historyTab.length + CountLetters(historyTab)) * 2];
+		String resultLine;
+		int i = 0;
 
-		// On doit gerer tout les caractères AVANT de s'occuper des '?'
-		// Sinon ca seras pas vraiment à chaque emplacement possible
-		// Trouver pourquoi on a des null qui s'affiche, pourquoi action est null et pourquoi il nous manque des cas
-
+		// Pour chaque ligne
 		for (String line : historyTab) {
+			// Et chaque emplacement de chaque ligne
 			for (int j = 0 ; j <= line.length() ; j++)
 			{
-				tmp = line.substring(0,j);
-				resultLine = (tmp == null)?"":tmp;
+				// On ajoute la clé constituée du début de la ligne, suivit de 'c' suivit du reste de la ligne.
+				resultLine = line.substring(0, j); 	// Le début de la chaine, de 0 à j
 				resultLine += 'c';
-				resultLine += ((tmp = line.substring(j,line.length())) == null)?"":tmp;
+				resultLine += line.substring(j);	// La fin de la chaine, à partir de j
 				result[i] = resultLine;
 				i++;
 
-				tmp = line.substring(0,j);
-				resultLine = (tmp == null)?"":tmp;
+				// On fait pareil avec la lettre 't'
+				resultLine = line.substring(0,j);	// Le début de la chaine, de 0 à j
 				resultLine += 't';
-				resultLine += ((tmp = line.substring(j,line.length())) == null)?"":tmp;
+				resultLine += line.substring(j);	// La fin de la chaine, à partir de j
 				result[i] = resultLine;
 				i++;
 			}
+			// Et on répéte ca pour tout les emplacement possible. (= en premier caractère, entre chaque caratère, et en dernier caratère)
 		}
 
+		// On obtien donc un gros tableau qui contient des doubles, et vu que l'on appelle cette fonction plusieurs fois d'affilé pour chaque '?', il est important de supprimer les doublons entre chaque
 		result = RemoveDoubles(result);
 		return result;
 	}
 
+	// Simple fonction qui compte le total de lettre d'un tableau de String
 	private static int CountLetters(String[] tab) {
 		int sum = 0;
 
@@ -277,6 +276,7 @@ public class Input {
 		return sum;
 	}
 
+	// Simple fonction qui utilise la propriété d'unicité des Set afin de supprimer les doublons efficacement.
 	private static String[] RemoveDoubles(String[] tab) {
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>(Arrays.asList(tab));
          
