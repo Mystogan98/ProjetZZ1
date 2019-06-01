@@ -8,11 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Input {
-    private static Action action;
-    private static char actionToken = ':', commentToken = '#';
-	private static HashMap<String,Action> script = null;  // Exemple : f(ctc):t => ("ctc", Action.cheat)
-	public static boolean readFromTerminal = true;
+    private static Action action;	// Stocke l'action du joueur pour ce tour
+    private static char actionToken = ':', commentToken = '#';	// Les différents tokens utilisés dans le script
+	private static HashMap<String,Action> script = null;	// Dictionnaire chargé de stocker la totalité des instructions du script sous la forme <"historique", Action>
+	// Exemple : f(ctc):t => ("ctc", Action.cheat)
+	public static boolean readFromTerminal = true;	// Est-ce que le joueur joue au clavier (= true) ou via un script (= false) ?
 
+	// Fonction appelée dans Player determinant l'action à jouer.
 	public static Action getInput(Memory memory) {
 		if(readFromTerminal)
 			return Input.TerminalInput();
@@ -20,9 +22,10 @@ public class Input {
 			return Input.FileInput(memory);
 	}
 
+	// Lecture de l'action via le terminal.
     private static Action TerminalInput()
     {
-		System.out.println("Entre 'cooperer' ou 'tricher'.");
+		System.out.println("Entrez 'cooperer' ou 'tricher'.");
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
@@ -42,20 +45,17 @@ public class Input {
         return action;
     }
 
+	// Détermine l'action a jouer selon le script actuellement chargé et l'historique de l'IA
 	private static Action FileInput(Memory memory) {
 		ArrayList<Action> history = memory.GetBotHistory();
 		String line = "";
 
-		if(script == null) {	// Si le script n'existe pas, le lire
-			getScript("script.isis");
-			System.out.println(script);
-
-			if(script == null) {	// Si le script n'existe toujours pas, erreur
-				System.err.println("Le script n'as pas pu etre lu");
-				return null;
-			}
+		if(script == null) {	// Si le script n'existe pas
+			System.err.println("Aucun script n'est actuellement chargé.");
+			return null;
 		}
 		
+		// Transforme l'historique de l'IA en chaine de caractère de forme "ct" afin d'etre utilisé comme clé dans le dictionnaire Script.
 		for (Action act : history) {
 			if(act == Action.cooperate)
 				line += "c";
@@ -63,12 +63,14 @@ public class Input {
 				line += 't';
 		}
 		
+		// On essaye d'obtenir l'action liée à cette clé, si on ne trouve pas on supprime le premier caractère de la clé (l'action la plus ancienne) et on rééssaye
 		while(script.get(line) == null && line.length() > 0)
 			line = line.substring(1);
 		
 		return script.get(line);
     }
-    
+	
+	// Fonction chargée de créer le dictionnaire Script.
     public static void getScript(String filename)
     {
 		File file = new File(filename);
@@ -84,8 +86,10 @@ public class Input {
 		}
 		
 		try {
+			// Tant qu'on lit des lignes dans le fichier...
 			while ((line = reader.readLine()) != null)
 			{
+				// On traite cette ligne dans "computeScriptLine" qui retourne l'historique (ou null) ainsi que l'action qui y est liée dans la variable Action.
 				history = computeScriptLine(line.toCharArray());
 				if(history != null) {
 					script.put(history, action);
