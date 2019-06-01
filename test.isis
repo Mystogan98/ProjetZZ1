@@ -11,18 +11,11 @@
 # si cc alors : c   => Si l'IA a coopérer les deux derniers tours, coopérer															#
 #####################################################################################################################################
 
-#:c
-#*:t
-#*c:c
-?t:t
 
-# Rajouter * et ?
-# Ou changer la syntaxe, ajouter le nombre de coup
-# ajouter des conditions, par exemple t <= 1 dans les 5 derniers coups
+:c
+*:t
 
-# "a tricher dans les 4 derniers coups" :
-# f(ccct):t, f(cctc):t, ....
-# f(???t):t
-# f(t >= 1, 4):t
+*c:c
+*t:t
 
-# f(*********):t
+?????????:t
