@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+
 public class Game {
     private Strategy bot;
     private Player player;
@@ -14,15 +16,18 @@ public class Game {
         player.ResetScore();
         memory.Reset();
         System.out.println(bot.GetName());
-        for(int i = 0 ; i < 10 ; i++) {
-            bot.Play(memory);
-            player.Play(memory);
-            ComputeScore();
-            memory.EndTurn();
-            ShowScore();
-        }
+        for(int i = 0 ; i < 10 ; i++)
+			ComputeOneTurn();
         System.out.println();
-    }
+	}
+	
+	private void ComputeOneTurn() {
+		bot.Play(memory);
+		player.Play(memory);
+		ComputeScore();
+		memory.EndTurn();
+		ShowScore();
+	}
 
     public void Tournament() {
         int botScore = 0;
@@ -34,13 +39,8 @@ public class Game {
             bot.IncreaseScore(botScore);    // We keep the score through all the AI
 
             System.out.println(bot.GetName());
-            for(int i = 0 ; i < 10 ; i++) {
-                bot.Play(memory);
-                player.Play(memory);
-                ComputeScore();
-                memory.EndTurn();
-                ShowScore();
-            }
+            for(int i = 0 ; i < 10 ; i++)
+                ComputeOneTurn();
             botScore = bot.GetScore();
             System.out.println();
         }
@@ -50,7 +50,51 @@ public class Game {
         System.out.println("Player : " + player.GetScore());
         System.out.println("Bot    : " + bot.GetScore());
         System.out.println();
-    }
+	}
+	
+	public void Mystery(BufferedReader in) {
+		int maxScore = 0;
+		int choix;
+		String file;
+
+		for(int i = 0 ; i < 3 ; i++) {
+			player.ResetScore();
+			memory.Reset();
+			bot = Strategy.Instantiate(StrategyNames.Detective.getName()); //StrategyNames.Deceitful);
+			for(int j = 0 ; j < 10 ; j++)
+				ComputeOneTurn();
+			if(player.score > maxScore)
+				maxScore = player.score;
+
+			System.out.println("Score ce tour : " + player.score);
+			System.out.println("Score maximum : " + maxScore);
+			System.out.println();
+			if(i < 2) {
+				System.out.println("1 - Charger un nouveau script (Actuel : " + Main.scriptName + ")");
+				System.out.println("2 - Round suivant");
+				try {
+					choix = Integer.parseInt(in.readLine());
+				} catch(Exception e) {
+					System.err.println("Problème lors de la sélection.");
+					choix = 0;
+				}
+				switch(choix) {
+					case 1:
+						Main.ClearScreen();
+						System.out.println("Indiquez le nom du script à charger :");
+						try {
+							file = in.readLine();
+						} catch(Exception e) {
+							System.err.println("Problème lors de l'entrée du nom de fichier.");
+							return;
+						}
+						Input.getScript(file);
+					break;
+				}
+			}
+			Main.ClearScreen();
+		}
+	}
 
     private void ShowScore() {
         String result = "Bot : ";

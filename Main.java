@@ -17,24 +17,24 @@ public class Main {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         ClearScreen();
 
-        while(choix != 6)
+        while(choix != 7)
         {
             System.out.println("1 - Jouer contre une IA");
-            System.out.println("2 - Mode Tournoi");
-            System.out.println("3 - Aide");
-            System.out.println("4 - Changer le mode de jeu (Actuel : " + ((Input.readFromTerminal) ? "Clavier)" : "Script)"));
-            System.out.println("5 - Charger un nouveau script (Actuel : " + scriptName + ")");
-            System.out.println("6 - Quitter");
+			System.out.println("2 - Mode Tournoi");
+			System.out.println("3 - IA Mystère ");
+            System.out.println("4 - Aide");
+            System.out.println("5 - Changer le mode de jeu (Actuel : " + ((Input.readFromTerminal)? "Clavier)" : "Script)"));
+            System.out.println("6 - Charger un nouveau script (Actuel : " + scriptName + ")");
+            System.out.println("7 - Quitter");
             
             try {
                 choix = Integer.parseInt(in.readLine());
             } catch(Exception e) {
                 System.err.println("Problème lors de la sélection.");
-                return;
+                choix = 0;
             }
 
-            switch(choix)
-            {
+            switch(choix) {
                 case 1:
                     AISelectionMenu(in);
                 break;
@@ -48,11 +48,22 @@ public class Main {
                         ClearScreen();
                         game.Tournament();
                     }
-                break;
-                case 3:
+				break;
+				case 3:
+					if(Input.readFromTerminal)
+					{
+						ClearScreen();
+						System.out.println("Impossible de jouer au clavier en mode IA mystère. Veuillez changer le mode de jeu ou charger un nouveau script.");
+						System.out.println();
+					} else {
+						ClearScreen();
+						game.Mystery(in);
+					}
+				break;
+                case 4:
                     HelpMenu(in);
                 break;
-                case 4:
+                case 5:
                     ClearScreen();
                     System.out.println("Choissez votre mode de jeu :");
                     System.out.println("\033[31mAttention\033[0m - Il est impossible de jouer au clavier en mode tournoi.");
@@ -71,13 +82,13 @@ public class Main {
                         Input.readFromTerminal = false;
                     ClearScreen();
                 break;
-                case 5:
+                case 6:
                     ClearScreen();
-                    System.out.println("Indiquez le nom de script à charger :");
+                    System.out.println("Indiquez le nom du script à charger :");
                     try {
                         file = in.readLine();
                     } catch(Exception e) {
-                        System.err.println("Problème lors l'entrée du nom de fichier.");
+                        System.err.println("Problème lors de l'entrée du nom de fichier.");
                         return;
                     }
                     Input.getScript(file);  
