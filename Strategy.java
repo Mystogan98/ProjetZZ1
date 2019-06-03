@@ -11,6 +11,7 @@ public class Strategy extends Player {
 
     private static Strategy InstantiateByName(String name)
     {
+        0;
         switch(name)
         {
             case "Cheater":
@@ -27,6 +28,8 @@ public class Strategy extends Player {
                 return new Detective();
             case "Wary":
                 return new Wary();
+            case "Deceitful":
+                return new Deceitful();
             default:
                 System.out.println("Y'a une erreur là Jean-Paul");
                 return InstantiateByRandom();
