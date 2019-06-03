@@ -11,6 +11,7 @@ public class Strategy extends Player {
 
     private static Strategy InstantiateByName(String name)
     {
+        0;
         switch(name)
         {
             case "Cheater":
