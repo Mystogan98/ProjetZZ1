@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 
 public class Alternater extends Strategy {
     private String name = StrategyNames.Alternater.getName();

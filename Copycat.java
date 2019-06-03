@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class Copycat extends Strategy {
     private String name = StrategyNames.Copycat.getName();
