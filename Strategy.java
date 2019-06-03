@@ -27,6 +27,8 @@ public class Strategy extends Player {
                 return new Detective();
             case "Wary":
                 return new Wary();
+            case "Deceitful":
+                return new Deceitful();
             default:
                 System.out.println("Y'a une erreur là Jean-Paul");
                 return InstantiateByRandom();
