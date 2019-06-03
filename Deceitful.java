@@ -1,8 +1,5 @@
 import java.util.ArrayList;
-
 import javax.lang.model.util.ElementScanner6;
-
-import javafx.scene.shape.Ellipse;
 
 public class Deceitful extends Strategy {
     private String name = StrategyNames.Deceitful.getName();
@@ -31,7 +28,7 @@ public class Deceitful extends Strategy {
             default:
                 if(Souvenir.get(size-1) == Action.cooperate)
                 {
-                    if(Souvenir.get(size-2) == Action.cooperate || Souvenir.get(size - 3) == Action.cooperate)
+                    if(Souvenir.get(size-3) == Action.cooperate)
                     {
                         action = Action.cheat;
                     }
@@ -42,7 +39,7 @@ public class Deceitful extends Strategy {
                 }
                 else
                 {
-                    if(Souvenir.get(size - 2) == Action.cheat && Souvenir.get(size-3) == Action.cheat)
+                    if(Souvenir.get(size - 2) == Action.cooperate || (Souvenir.get(size-2)== Action.cheat && Souvenir.get(size-3) == Action.cheat))
                     {
                         action = Action.cheat;
                     }
@@ -52,8 +49,8 @@ public class Deceitful extends Strategy {
                     }
                 }
                 break;
-
-        }
+		}
+		memory.MemoriseBotAction(action);
     }
     public String GetName() { return name; }
 }

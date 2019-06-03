@@ -60,7 +60,8 @@ public class Game {
 		for(int i = 0 ; i < 3 ; i++) {
 			player.ResetScore();
 			memory.Reset();
-			bot = Strategy.Instantiate(StrategyNames.Detective.getName()); //StrategyNames.Deceitful);
+			bot = Strategy.Instantiate(StrategyNames.Deceitful.getName());
+			System.out.println(bot.GetName());
 			for(int j = 0 ; j < 10 ; j++)
 				ComputeOneTurn();
 			if(player.score > maxScore)
@@ -91,9 +92,10 @@ public class Game {
 						Input.getScript(file);
 					break;
 				}
+				Main.ClearScreen();
 			}
-			Main.ClearScreen();
 		}
+		System.out.println();
 	}
 
     private void ShowScore() {

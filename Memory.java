@@ -14,13 +14,15 @@ public class Memory {
     public void Show() {
         System.out.print("Player : ");
         for (Action action : playerHistory) {
-            System.out.print(action.toString() + " / ");
+			if(action != null)
+            	System.out.print(action.toString() + " / ");
         }
         System.out.println();
 
         System.out.print("Bot : ");
         for (Action action : botHistory) {
-            System.out.print(action.toString() + " / ");
+			if(action != null)
+            	System.out.print(action.toString() + " / ");
         }
         System.out.println();
     }
